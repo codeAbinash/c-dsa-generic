@@ -1,15 +1,14 @@
 #include "stdio.h"
-#include "../LinkedList.c"
-// #include "../LinkedList.h"
+#include "../linked_list.c"
+// #include "../linked_list.h"
 
 typedef struct Array {
    int* data;
    size_t size;
 } Array;
 
-void print_array(ll_node* node, size_t index) {
+void print_array(ll_node* node) {
    Array* a = (Array*)node->data;
-   printf("Array %ld: ", index);
    for (int i = 0; i < a->size; i++) {
       printf("%d ", a->data[i]);
    }
@@ -35,7 +34,7 @@ int main() {
    a2.data[0] = 4, a2.data[1] = 5, a2.data[2] = 6;
    a2.size = 3;
 
-   LinkedList list = ll_init_with_destroyer(sizeof(Array), destroyer);
+   linked_list list = ll_init_with_destroyer(sizeof(Array), destroyer);
 
    ll_push_back(&list, &a1);
    ll_push_back(&list, &a2);

@@ -30,17 +30,17 @@ typedef struct ll_node {
  * @var element_size: size of each element in the list
  * @var destroyer: function pointer to the destroyer function
 */
-typedef struct LinkedList {
+typedef struct linked_list {
    size_t size;
    ll_node* head;
    ll_node* tail;
    size_t element_size;
    void (*destroyer)(ll_node*);
-} LinkedList;
+} linked_list;
 
 
-LinkedList ll_init_with_destroyer(size_t element_size, void (*destroyer)(ll_node*)) {
-   LinkedList list;
+linked_list ll_init_with_destroyer(size_t element_size, void (*destroyer)(ll_node*)) {
+   linked_list list;
    list.size = 0;
    list.head = NULL;
    list.tail = NULL;
@@ -50,12 +50,12 @@ LinkedList ll_init_with_destroyer(size_t element_size, void (*destroyer)(ll_node
 }
 
 
-LinkedList ll_init(size_t element_size) {
+linked_list ll_init(size_t element_size) {
    return ll_init_with_destroyer(element_size, NULL);
 }
 
 
-ll_node* ll_create_node(LinkedList* list, void* data) {
+ll_node* ll_create_node(linked_list* list, void* data) {
    ll_node* new_node = (ll_node*)malloc(sizeof(ll_node));
    assert(new_node && "Not Enough Memory!");
    new_node->data = malloc(list->element_size);
@@ -66,7 +66,7 @@ ll_node* ll_create_node(LinkedList* list, void* data) {
 }
 
 
-size_t ll_size(LinkedList* list) {
+size_t ll_size(linked_list* list) {
    return list->size;
 }
 
@@ -82,27 +82,27 @@ void ll_node_free(ll_node* node) {
    ll_node_destroyer(node);
 }
 
-int ll_is_empty(LinkedList* list) {
+int ll_is_empty(linked_list* list) {
    return list->size == 0;
 }
 
 
-ll_node* ll_end(LinkedList* list) {
+ll_node* ll_end(linked_list* list) {
    return list->tail;
 }
 
 
-ll_node* ll_begin(LinkedList* list) {
+ll_node* ll_begin(linked_list* list) {
    return list->head;
 }
 
 
-void* ll_front(LinkedList* list) {
+void* ll_front(linked_list* list) {
    return list->head->data;
 }
 
 
-void* ll_back(LinkedList* list) {
+void* ll_back(linked_list* list) {
    return list->tail->data;
 }
 
@@ -117,7 +117,7 @@ void _ll_node_destroyer(void (*destroyer)(ll_node*), ll_node* node) {
 
 
 // Destroying the whole list
-void ll_destroyer(LinkedList* list) {
+void ll_destroyer(linked_list* list) {
    ll_node* curr = list->head;
    ll_node* next;
    while (curr) {
@@ -135,13 +135,13 @@ void ll_destroyer(LinkedList* list) {
 }
 
 
-void ll_free(LinkedList* list) {
+void ll_free(linked_list* list) {
    ll_destroyer(list);
 }
 
 
 // For Each element in the list call the callback function
-void ll_for_each(LinkedList* list, void (*callback)(ll_node*, size_t)) {
+void ll_for_each_idx(linked_list* list, void (*callback)(ll_node*, size_t)) {
    ll_node* curr = list->head;
    size_t i = 0;
    while (curr) {
@@ -151,9 +151,18 @@ void ll_for_each(LinkedList* list, void (*callback)(ll_node*, size_t)) {
    }
 }
 
+void ll_for_each(linked_list* list, void (*callback)(ll_node*)) {
+   ll_node* curr = list->head;
+   while (curr) {
+      // Call the callback function with the current node
+      callback(curr);
+      curr = curr->next;
+   }
+}
+
 
 // Insertion at the beginning 
-void ll_push_front(LinkedList* list, void* data) {
+void ll_push_front(linked_list* list, void* data) {
    ll_node* new_node = ll_create_node(list, data);
    new_node->next = list->head;
    list->head = new_node;
@@ -165,7 +174,7 @@ void ll_push_front(LinkedList* list, void* data) {
 
 
 // Deletion at the beginning
-void ll_pop_front(LinkedList* list) {
+void ll_pop_front(linked_list* list) {
    assert(list->head && "Cannot Delete, Empty List!");
    ll_node* oldHead = list->head;
    list->head = list->head->next;
@@ -178,7 +187,7 @@ void ll_pop_front(LinkedList* list) {
 
 
 // Insertion at the end
-void ll_push_back(LinkedList* list, void* data) {
+void ll_push_back(linked_list* list, void* data) {
    ll_node* new_node = ll_create_node(list, data);
    // if there is no item in the list i.e. head == NULL
    if (list->head == NULL) {
@@ -195,7 +204,7 @@ void ll_push_back(LinkedList* list, void* data) {
 
 
 // Deletion at the end
-void ll_pop_back(LinkedList* list) {
+void ll_pop_back(linked_list* list) {
    assert(list->size && "Cannot Delete, Empty List!");
    ll_node* curr = list->head, * prev = NULL;
    // If there is only one item in the list
@@ -220,7 +229,7 @@ void ll_pop_back(LinkedList* list) {
 
 
 // Deletion at a given index
-void ll_delete_at(LinkedList* list, size_t index) {
+void ll_delete_at(linked_list* list, size_t index) {
    size_t size = list->size;
    ll_node* curr = list->head, * nextNode = NULL;
    size_t i = 1;
@@ -250,7 +259,7 @@ void ll_delete_at(LinkedList* list, size_t index) {
 
 
 // Insertion at a given index
-void ll_insert_at(LinkedList* list, void* data, size_t index) {
+void ll_insert_at(linked_list* list, void* data, size_t index) {
    size_t size = list->size;
    ll_node* new_node, * curr_node = list->head;
    size_t i = 1;
@@ -284,7 +293,7 @@ int ll_node_cmp(ll_node* node1, ll_node* node2, size_t size) {
 
 
 // Remove all the occurrences of a given data
-void ll_remove_cmp(LinkedList* list, void* data, int (*cmp)(const void*, const void*, size_t)) {
+void ll_remove_cmp(linked_list* list, void* data, int (*cmp)(const void*, const void*, size_t)) {
    ll_node* curr = list->head, * prev = NULL, * next = NULL;
    while (curr) {
       next = curr->next;
@@ -310,12 +319,12 @@ void ll_remove_cmp(LinkedList* list, void* data, int (*cmp)(const void*, const v
 }
 
 
-void ll_remove(LinkedList* list, void* data) {
+void ll_remove(linked_list* list, void* data) {
    ll_remove_cmp(list, data, memcmp);
 }
 
 
-void ll_remove_node(LinkedList* list, ll_node* node) {
+void ll_remove_node(linked_list* list, ll_node* node) {
    ll_node* curr = list->head, * prev = NULL, * next = NULL;
    while (curr) {
       next = curr->next;
@@ -347,7 +356,7 @@ void ll_set_node_data(ll_node* node, void* data, size_t size) {
 
 
 // Deletes all the nodes after a given node
-void ll_erase_after(LinkedList* list, ll_node* node) {
+void ll_erase_after(linked_list* list, ll_node* node) {
    ll_node* curr = node->next, * next = NULL;
    while (curr) {
       next = curr->next;
@@ -360,7 +369,7 @@ void ll_erase_after(LinkedList* list, ll_node* node) {
 }
 
 
-void ll_erase_after_index(LinkedList* list, size_t index) {
+void ll_erase_after_index(linked_list* list, size_t index) {
    ll_node* curr = list->head, * next = NULL;
    size_t i = 0;
    // Invalid Index
@@ -375,7 +384,7 @@ void ll_erase_after_index(LinkedList* list, size_t index) {
 
 
 // Get the node at a given index
-ll_node* ll_node_at(LinkedList* list, size_t index) {
+ll_node* ll_node_at(linked_list* list, size_t index) {
    size_t size = list->size;
    ll_node* curr = list->head;
    size_t i = 0;
@@ -390,7 +399,7 @@ ll_node* ll_node_at(LinkedList* list, size_t index) {
 }
 
 // Get the node with the given data using the given comparator
-ll_node* ll_get_node_cmp(LinkedList* list, void* data, int (*cmp)(const void*, const void*, size_t)) {
+ll_node* ll_get_node_cmp(linked_list* list, void* data, int (*cmp)(const void*, const void*, size_t)) {
    ll_node* curr = list->head;
    while (curr) {
       if (cmp(curr->data, data, list->element_size) == 0)
@@ -401,17 +410,17 @@ ll_node* ll_get_node_cmp(LinkedList* list, void* data, int (*cmp)(const void*, c
 }
 
 // Get the node with the given data using memcmp
-ll_node* ll_get_node(LinkedList* list, void* data) {
+ll_node* ll_get_node(linked_list* list, void* data) {
    return ll_get_node_cmp(list, data, memcmp);
 }
 
 
-ll_node* ll_get_node_at(LinkedList* list, size_t index) {
+ll_node* ll_get_node_at(linked_list* list, size_t index) {
    return ll_node_at(list, index);
 }
 
 
-void* ll_get(LinkedList* list, void* data) {
+void* ll_get(linked_list* list, void* data) {
    ll_node* node = ll_get_node(list, data);
    if (node)
       return node->data;
@@ -419,17 +428,17 @@ void* ll_get(LinkedList* list, void* data) {
 }
 
 
-ll_node* ll_find(LinkedList* list, void* data) {
+ll_node* ll_find(linked_list* list, void* data) {
    return ll_get_node(list, data);
 }
 
 
-ll_node* ll_find_cmp(LinkedList* list, void* data, int (*cmp)(const void*, const void*, size_t)) {
+ll_node* ll_find_cmp(linked_list* list, void* data, int (*cmp)(const void*, const void*, size_t)) {
    return ll_get_node_cmp(list, data, cmp);
 }
 
 
-void* ll_data_at(LinkedList* list, size_t index) {
+void* ll_data_at(linked_list* list, size_t index) {
    return ll_node_at(list, index)->data;
 }
 
@@ -444,7 +453,7 @@ void ll_set(ll_node* node, void* data) {
 }
 
 
-void ll_set_at(LinkedList* list, size_t index, void* data) {
+void ll_set_at(linked_list* list, size_t index, void* data) {
    // FInd the node at index
    ll_node* node = ll_node_at(list, index);
    // Copy the data to the node
@@ -452,7 +461,7 @@ void ll_set_at(LinkedList* list, size_t index, void* data) {
 }
 
 
-int ll_contains_cmp(LinkedList* list, void* data, int (*cmp)(const void*, const void*, size_t)) {
+int ll_contains_cmp(linked_list* list, void* data, int (*cmp)(const void*, const void*, size_t)) {
    ll_node* curr = list->head;
    while (curr) {
       if (cmp(curr->data, data, list->element_size) == 0)
@@ -463,7 +472,7 @@ int ll_contains_cmp(LinkedList* list, void* data, int (*cmp)(const void*, const 
 }
 
 
-size_t ll_index_of_cmp(LinkedList* list, void* data, int (*cmp)(const void*, const void*, size_t)) {
+size_t ll_index_of_cmp(linked_list* list, void* data, int (*cmp)(const void*, const void*, size_t)) {
    ll_node* curr = list->head;
    size_t i = 0;
    while (curr) {
@@ -476,17 +485,17 @@ size_t ll_index_of_cmp(LinkedList* list, void* data, int (*cmp)(const void*, con
 }
 
 
-size_t ll_index_of(LinkedList* list, void* data) {
+size_t ll_index_of(linked_list* list, void* data) {
    return ll_index_of_cmp(list, data, memcmp);
 }
 
 
-int ll_contains(LinkedList* list, void* data) {
+int ll_contains(linked_list* list, void* data) {
    return ll_index_of(list, data) != -1;
 }
 
 
-size_t ll_index_of_node(LinkedList* list, ll_node* node) {
+size_t ll_index_of_node(linked_list* list, ll_node* node) {
    ll_node* curr = list->head;
    size_t i = 0;
    while (curr) {
@@ -500,19 +509,19 @@ size_t ll_index_of_node(LinkedList* list, ll_node* node) {
 
 
 // If the memory address of the node is same as the given node
-int ll_contains_node(LinkedList* list, ll_node* node) {
+int ll_contains_node(linked_list* list, ll_node* node) {
    return ll_index_of_node(list, node) != -1;
 }
 
 
-void ll_swap(LinkedList* list1, LinkedList* list2) {
-   LinkedList temp = *list1;
+void ll_swap(linked_list* list1, linked_list* list2) {
+   linked_list temp = *list1;
    *list1 = *list2;
    *list2 = temp;
 }
 
 
-void ll_reverse(LinkedList* list) {
+void ll_reverse(linked_list* list) {
    ll_node* prev = NULL, * curr = list->head, * next = NULL;
    list->tail = list->head;
    while (curr) {
@@ -528,7 +537,7 @@ void ll_reverse(LinkedList* list) {
 
 
 // Remove all the elements from the list
-void ll_clear(LinkedList* list) {
+void ll_clear(linked_list* list) {
    ll_node* curr = list->head, * next = NULL;
    while (curr) {
       next = curr->next;

@@ -30,13 +30,13 @@ typedef struct ll_node {
  * @var element_size: size of each element in the list
  * @var destroyer: function pointer to the destroyer function
 */
-typedef struct LinkedList {
+typedef struct linked_list {
    size_t length;
    ll_node* head;
    ll_node* tail;
    size_t element_size;
    void (*destroyer)(ll_node*);
-} LinkedList;
+} linked_list;
 
 
 /**
@@ -53,7 +53,7 @@ typedef struct LinkedList {
  * @note Use ll_node_free() to free the memory of a node
  * Time Complexity: O(1)
 */
-LinkedList ll_init_with_destroyer(size_t element_size, void (*destroyer)(ll_node*));
+linked_list ll_init_with_destroyer(size_t element_size, void (*destroyer)(ll_node*));
 
 
 /**
@@ -65,7 +65,7 @@ LinkedList ll_init_with_destroyer(size_t element_size, void (*destroyer)(ll_node
  * @warning It will not free the memory of the pointer(s) that is(are) stored in the data field
  * Time Complexity: O(1)
 */
-LinkedList ll_init(size_t element_size);
+linked_list ll_init(size_t element_size);
 
 
 /**
@@ -76,7 +76,7 @@ LinkedList ll_init(size_t element_size);
  * @note The data will be shallow copied
  * Time Complexity: O(1)
 */
-ll_node* ll_create_node(LinkedList* list, void* data);
+ll_node* ll_create_node(linked_list* list, void* data);
 
 
 /**
@@ -86,7 +86,7 @@ ll_node* ll_create_node(LinkedList* list, void* data);
  *
  * Time Complexity: O(1)
 */
-size_t ll_size(LinkedList* list);
+size_t ll_size(linked_list* list);
 
 
 /**
@@ -122,7 +122,7 @@ void _ll_node_destroyer(void (*destroyer)(ll_node*), ll_node* node);
  * @note Use a custom destroyer function to free the pointers
  * Time Complexity: O(n)
 */
-void ll_destroyer(LinkedList* list);
+void ll_destroyer(linked_list* list);
 
 
 /**
@@ -130,7 +130,7 @@ void ll_destroyer(LinkedList* list);
  * @note Calls ll_destroyer() internally
  * Time Complexity: O(n)
 */
-void ll_free(LinkedList* list);
+void ll_free(linked_list* list);
 
 
 /**
@@ -143,8 +143,20 @@ void ll_free(LinkedList* list);
  *       The second parameter is the index of the node
  * Time Complexity: O(n)
 */
-void ll_for_each(LinkedList* list, void (*callback)(ll_node*, size_t));
+void ll_for_each_idx(linked_list* list, void (*callback)(ll_node*, size_t));
 
+
+/**
+ * @brief Calls the callback function for each node in the list
+ * @param list: pointer to the list
+ * @param callback: function pointer to the callback function
+ * @note The callback function should have the following signature:
+ *    void callback(ll_node*)
+ *    The parameter is the pointer to the node
+ * Time Complexity: O(n)
+*/
+
+void ll_for_each(linked_list* list, void (*callback)(ll_node*));
 
 /**
  * @brief Inserts a new node at the end of the list
@@ -153,7 +165,7 @@ void ll_for_each(LinkedList* list, void (*callback)(ll_node*, size_t));
  * @note The data will be shallow copied
  * Time Complexity: O(1)
 */
-void ll_push_front(LinkedList* list, void* data);
+void ll_push_front(linked_list* list, void* data);
 
 
 /**
@@ -162,7 +174,7 @@ void ll_push_front(LinkedList* list, void* data);
  * @note internally calls ll_node_destroyer() or the custom destroyer function
  * Time Complexity: O(1)
 */
-void ll_pop_front(LinkedList* list);
+void ll_pop_front(linked_list* list);
 
 
 /**
@@ -171,7 +183,7 @@ void ll_pop_front(LinkedList* list);
  * @note internally calls ll_node_destroyer() or the custom destroyer function
  * Time Complexity: O(n)
 */
-void ll_pop_back(LinkedList* list);
+void ll_pop_back(linked_list* list);
 
 
 /**
@@ -181,7 +193,7 @@ void ll_pop_back(LinkedList* list);
  * @note The data will be shallow copied
  * Time Complexity: O(1)
 */
-void ll_push_back(LinkedList* list, void* data);
+void ll_push_back(linked_list* list, void* data);
 
 
 /**
@@ -191,7 +203,7 @@ void ll_push_back(LinkedList* list, void* data);
  * @note internally calls ll_node_destroyer() or the custom destroyer function
  * Time Complexity: O(n)
 */
-void ll_delete_at(LinkedList* list, size_t index);
+void ll_delete_at(linked_list* list, size_t index);
 
 
 /**
@@ -202,7 +214,7 @@ void ll_delete_at(LinkedList* list, size_t index);
  * @note The data will be shallow copied
  * Time Complexity: O(n)
 */
-void ll_insert_at(LinkedList* list, void* data, size_t index);
+void ll_insert_at(linked_list* list, void* data, size_t index);
 
 
 /**
@@ -228,7 +240,7 @@ int ll_node_cmp(ll_node* node1, ll_node* node2, size_t size);
  * @node Internally calls ll_node_destroyer() or the custom destroyer function
  * Time Complexity: O(n)
 */
-void ll_remove_cmp(LinkedList* list, void* data, int (*cmp)(const void*, const void*, size_t));
+void ll_remove_cmp(linked_list* list, void* data, int (*cmp)(const void*, const void*, size_t));
 
 
 /**
@@ -238,7 +250,7 @@ void ll_remove_cmp(LinkedList* list, void* data, int (*cmp)(const void*, const v
  * @note Internally calls ll_remove_cmp()
  * Time Complexity: O(n)
 */
-void ll_remove(LinkedList* list, void* data);
+void ll_remove(linked_list* list, void* data);
 
 
 /**
@@ -248,7 +260,7 @@ void ll_remove(LinkedList* list, void* data);
  * @note Internally calls ll_node_destroyer() or the custom destroyer function
  * Time Complexity: O(n)
 */
-void ll_remove_node(LinkedList* list, ll_node* node);
+void ll_remove_node(linked_list* list, ll_node* node);
 
 
 /**
@@ -270,7 +282,7 @@ void ll_set_node_data(ll_node* node, void* data, size_t size);
  * @note Internally calls ll_node_destroyer() or the custom destroyer function
  * Time Complexity: O(1)
 */
-void ll_erase_after(LinkedList* list, ll_node* node);
+void ll_erase_after(linked_list* list, ll_node* node);
 
 
 /**
@@ -280,7 +292,7 @@ void ll_erase_after(LinkedList* list, ll_node* node);
  * @note Internally ll_erase_after and ll_destroyer() or the custom destroyer function
  * Time Complexity: O(n)
 */
-void ll_erase_after_index(LinkedList* list, size_t index);
+void ll_erase_after_index(linked_list* list, size_t index);
 
 
 /**
@@ -291,7 +303,7 @@ void ll_erase_after_index(LinkedList* list, size_t index);
  * @note Returns NULL if the index is out of range or the list is empty
  * Time Complexity: O(n)
 */
-ll_node* ll_node_at(LinkedList* list, size_t index);
+ll_node* ll_node_at(linked_list* list, size_t index);
 
 
 /**
@@ -299,7 +311,7 @@ ll_node* ll_node_at(LinkedList* list, size_t index);
  * @note Internally calls ll_node_at()
  * Time Complexity: O(n)
 */
-ll_node* ll_get_node_at(LinkedList* list, size_t index);
+ll_node* ll_get_node_at(linked_list* list, size_t index);
 
 
 /**
@@ -314,7 +326,7 @@ ll_node* ll_get_node_at(LinkedList* list, size_t index);
  * Returns NULL if the data is not found
  * Time Complexity: O(n)
 */
-ll_node* ll_get_node_cmp(LinkedList* list, void* data, int (*cmp)(const void*, const void*, size_t));
+ll_node* ll_get_node_cmp(linked_list* list, void* data, int (*cmp)(const void*, const void*, size_t));
 
 
 /**
@@ -325,7 +337,7 @@ ll_node* ll_get_node_cmp(LinkedList* list, void* data, int (*cmp)(const void*, c
  * Returns NULL if the data is not found
  * Time Complexity: O(n)
 */
-ll_node* ll_get_node(LinkedList* list, void* data);
+ll_node* ll_get_node(linked_list* list, void* data);
 
 
 /**
@@ -336,7 +348,7 @@ ll_node* ll_get_node(LinkedList* list, void* data);
  * Returns NULL if not found
  * Time Complexity: O(n)
 */
-void* ll_get(LinkedList* list, void* data);
+void* ll_get(linked_list* list, void* data);
 
 
 /**
@@ -344,7 +356,7 @@ void* ll_get(LinkedList* list, void* data);
  * @note Internally calls ll_get_node()
  * Time Complexity: O(n)
 */
-ll_node* ll_find(LinkedList* list, void* data);
+ll_node* ll_find(linked_list* list, void* data);
 
 
 /**
@@ -352,7 +364,7 @@ ll_node* ll_find(LinkedList* list, void* data);
  * @note Internally calls ll_get_node_cmp()
  * Time Complexity: O(n)
 */
-ll_node* ll_find_cmp(LinkedList* list, void* data, int (*cmp)(const void*, const void*, size_t));
+ll_node* ll_find_cmp(linked_list* list, void* data, int (*cmp)(const void*, const void*, size_t));
 
 
 /**
@@ -362,7 +374,7 @@ ll_node* ll_find_cmp(LinkedList* list, void* data, int (*cmp)(const void*, const
  * @note Internally calls ll_at()
  * Time Complexity: O(n)
 */
-void* ll_data_at(LinkedList* list, size_t index);
+void* ll_data_at(linked_list* list, size_t index);
 
 
 /**
@@ -394,7 +406,7 @@ void ll_set_node_data(ll_node* node, void* data, size_t size);
  * @note Internally calls ll_at() and memcpy()
  * Time Complexity: O(n)
 */
-void ll_set_at(LinkedList* list, size_t index, void* data);
+void ll_set_at(linked_list* list, size_t index, void* data);
 
 
 /**
@@ -408,7 +420,7 @@ void ll_set_at(LinkedList* list, size_t index, void* data);
  *       The third parameter is the size of each element in the list
  * Time Complexity: O(n)
 */
-int ll_contains_cmp(LinkedList* list, void* data, int (*cmp)(const void*, const void*, size_t));
+int ll_contains_cmp(linked_list* list, void* data, int (*cmp)(const void*, const void*, size_t));
 
 
 /**
@@ -418,7 +430,7 @@ int ll_contains_cmp(LinkedList* list, void* data, int (*cmp)(const void*, const 
  * @note Internally calls ll_contains_cmp() with memcmp as the comparator function
  * Time Complexity: O(n)
 */
-int ll_contains(LinkedList* list, void* data);
+int ll_contains(linked_list* list, void* data);
 
 
 /**
@@ -428,7 +440,7 @@ int ll_contains(LinkedList* list, void* data);
  * @note Checks the address of the node
  * Time Complexity: O(n)
 */
-int ll_contains_node(LinkedList* list, ll_node* node);
+int ll_contains_node(linked_list* list, ll_node* node);
 
 
 /**
@@ -436,7 +448,7 @@ int ll_contains_node(LinkedList* list, ll_node* node);
  * @param list: pointer to the list
  * Time Complexity: O(n)
 */
-void ll_reverse(LinkedList* list);
+void ll_reverse(linked_list* list);
 
 
 /**
@@ -444,7 +456,7 @@ void ll_reverse(LinkedList* list);
  * @param list: pointer to the list
  * Time Complexity: O(1)
 */
-int ll_is_empty(LinkedList* list);
+int ll_is_empty(linked_list* list);
 
 
 /**
@@ -453,7 +465,7 @@ int ll_is_empty(LinkedList* list);
  * @note returns list -> head
  * Time Complexity: O(1)
 */
-ll_node* ll_begin(LinkedList* list);
+ll_node* ll_begin(linked_list* list);
 
 
 /**
@@ -462,7 +474,7 @@ ll_node* ll_begin(LinkedList* list);
  * @note returns list -> tail
  * Time Complexity: O(1)
 */
-ll_node* ll_end(LinkedList* list);
+ll_node* ll_end(linked_list* list);
 
 
 /**
@@ -471,7 +483,7 @@ ll_node* ll_end(LinkedList* list);
  * @note returns list -> head -> data
  * Time Complexity: O(1)
 */
-void* ll_front(LinkedList* list);
+void* ll_front(linked_list* list);
 
 
 /**
@@ -480,7 +492,7 @@ void* ll_front(LinkedList* list);
  * @note returns list -> tail -> data
  * Time Complexity: O(1)
 */
-void* ll_back(LinkedList* list);
+void* ll_back(linked_list* list);
 
 
 /**
@@ -489,7 +501,7 @@ void* ll_back(LinkedList* list);
  * @note Internally calls ll_node_destroyer() or the custom destroyer function
  * Time Complexity: O(n)
 */
-void ll_clear(LinkedList* list);
+void ll_clear(linked_list* list);
 
 
 
@@ -504,7 +516,7 @@ void ll_clear(LinkedList* list);
  *       The third parameter is the size of each element in the list
  * Time Complexity: O(n)
 */
-size_t ll_index_of_cmp(LinkedList* list, void* data, int (*cmp)(const void*, const void*, size_t));
+size_t ll_index_of_cmp(linked_list* list, void* data, int (*cmp)(const void*, const void*, size_t));
 
 
 
@@ -515,7 +527,7 @@ size_t ll_index_of_cmp(LinkedList* list, void* data, int (*cmp)(const void*, con
  * @note Internally calls ll_index_of_cmp() with memcmp as the comparator function
  * Time Complexity: O(n)
 */
-size_t ll_index_of(LinkedList* list, void* data);
+size_t ll_index_of(linked_list* list, void* data);
 
 
 /**
@@ -526,7 +538,7 @@ size_t ll_index_of(LinkedList* list, void* data);
  * @note Returns -1 if the node is not found
  * Time Complexity: O(n)
 */
-size_t ll_index_of_node(LinkedList* list, ll_node* node);
+size_t ll_index_of_node(linked_list* list, ll_node* node);
 
 
 /**
@@ -535,7 +547,7 @@ size_t ll_index_of_node(LinkedList* list, ll_node* node);
  * @param list2: pointer to the second list
  * Time Complexity: O(1)
 */
-void ll_swap(LinkedList* list1, LinkedList* list2);
+void ll_swap(linked_list* list1, linked_list* list2);
 
 
 #endif

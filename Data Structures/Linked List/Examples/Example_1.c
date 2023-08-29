@@ -1,18 +1,18 @@
 #include "stdio.h"
-#include "../LinkedList.c"
-// #include "../LinkedList.h"
+#include "../linked_list.c"
+// #include "../linked_list.h"
 
 typedef struct Complex {
    int real, imaginary;
 } Complex;
 
-void printComplexNode(ll_node* node, size_t index) {
+void printComplexNode(ll_node* node) {
    Complex* c = (Complex*)node->data;
-   printf("%d: %d + %di\n", index, c->real, c->imaginary);
+   printf("%d + %di\n", c->real, c->imaginary);
 }
 
 int main() {
-   LinkedList list = ll_init(sizeof(Complex));
+   linked_list list = ll_init(sizeof(Complex));
    // Can store any data type
 
    Complex c1 = { 1, 2 };
