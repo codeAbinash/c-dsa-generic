@@ -1,6 +1,6 @@
 #include "stdio.h"
-#include "../linked_list.c"
-// #include "../linked_list.h"
+#include "../../Linked List/linked_list.h"
+#include "../../Linked List/linked_list.c"
 
 typedef struct Complex {
    int real, imaginary;
@@ -32,7 +32,7 @@ int main() {
    printf("\n After Reversing : \n");
    ll_for_each(&list, printComplexNode);
 
-   printf("\nSize: %d\n", list.size);
+   printf("\nSize: %ld\n", list.size);
 
    ll_free(&list);
    return 0;

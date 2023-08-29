@@ -1,42 +1,16 @@
 /*
 *  Library file for Singly Linked List
 *  Author: Abinash Karmakar
-*  https://github.com/codeAbinash/c-ds-algo-crafts
-*  2023-08-28 MIT License Version: 1.0
+*  https://github.com/codeAbinash/c-dsa-generic
+*  2023-08-28 MIT License Version: 1.1
 */
 
+#include "./linked_list.h"
 #include "malloc.h"
 #include "string.h"
 #include "assert.h"
 #include "stddef.h"
 
-
-/**
- * @brief Node of a Singly Linked List
- * @var data: void pointer to the data
- * @var next: pointer to the next node
-*/
-typedef struct ll_node {
-   void* data;
-   struct ll_node* next;
-} ll_node;
-
-
-/**
- * @brief Singly Linked List
- * @var length: length of the list
- * @var head: pointer to the head node
- * @var tail: pointer to the tail node
- * @var element_size: size of each element in the list
- * @var destroyer: function pointer to the destroyer function
-*/
-typedef struct linked_list {
-   size_t size;
-   ll_node* head;
-   ll_node* tail;
-   size_t element_size;
-   void (*destroyer)(ll_node*);
-} linked_list;
 
 
 linked_list ll_init_with_destroyer(size_t element_size, void (*destroyer)(ll_node*)) {

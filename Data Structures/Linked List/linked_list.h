@@ -1,12 +1,12 @@
 /*
-*  Header file for Singly Linked List of C-DSA-Crafts library
+*  Header file for Singly Linked List of c-dsa-generic library
 *  Author: Abinash Karmakar
 *  https://github.com/codeAbinash/c-dsa-generic
-*  2023-08-28, MIT License, Version: 1.0
+*  2023-08-28, MIT License, Version: 1.1
 */
 
-#ifndef c_dsa_crafts_singly_linked_list_h
-#define c_dsa_crafts_singly_linked_list_h
+#ifndef c_dsa_generic_singly_linked_list_h
+#define c_dsa_generic_singly_linked_list_h
 
 #include "stddef.h"
 
@@ -31,13 +31,12 @@ typedef struct ll_node {
  * @var destroyer: function pointer to the destroyer function
 */
 typedef struct linked_list {
-   size_t length;
+   size_t size;
    ll_node* head;
    ll_node* tail;
    size_t element_size;
    void (*destroyer)(ll_node*);
 } linked_list;
-
 
 /**
  * @brief Factory function to create a new Singly Linked List with a destroyer function

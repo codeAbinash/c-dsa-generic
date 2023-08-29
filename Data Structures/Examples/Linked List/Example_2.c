@@ -1,6 +1,6 @@
 #include "stdio.h"
-#include "../linked_list.c"
-// #include "../linked_list.h"
+#include "../../Linked List/linked_list.h"
+#include "../../Linked List/linked_list.c"
 
 typedef struct Array {
    int* data;
