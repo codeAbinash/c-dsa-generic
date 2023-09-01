@@ -1,4 +1,6 @@
-#include "util.h"
+#include "algorithms.h"
+#include "sorting.h"
+#include "sorting.c" // TODO: Remove this
 #include "stddef.h"
 #include "string.h"
 #include "stdlib.h"
@@ -176,5 +178,3 @@ void swap(void* a, void* b, size_t element_size) {
       ((byte*)b)[i] = temp;
    }
 }
-
-

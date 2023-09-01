@@ -1,4 +1,5 @@
 #include "stddef.h"
+#include "string.h"
 
 void selection_sort(void* start, void* end, size_t element_size, int (*cmp)(void*, void*)) {
    void* i = start;

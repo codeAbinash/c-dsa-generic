@@ -8,12 +8,12 @@
 #include "assert.h"
 #include "array.h"
 #include "malloc.h"
-#include "../util/util.h"
-#include "../util/util.c"
-#include "../util/sorting.h"
-#include "../util/sorting.c"
+#include "../../Algorithms/algorithms.h"
+#include "../../Algorithms/algorithms.c" // TODO: Remove this
 
-void _check_range(array* arr, void* start, void* end) {
+
+
+void __check_range(array* arr, void* start, void* end) {
    assert(start >= arr->data && "Start pointer out of bounds");
    assert(end <= arr->data + arr->size * arr->element_size && "End pointer out of bounds");
    assert(start <= end && "Start pointer must be less than or equal to end pointer");
@@ -49,7 +49,7 @@ void arr_for_each(array* arr, void (*callback)(void*)) {
 
 
 void arr_for_each_n_idx(array* arr, void* start, size_t n, void (*callback)(void*, size_t)) {
-   _check_range(arr, start, start + n * arr->element_size);
+   __check_range(arr, start, start + n * arr->element_size);
    for_each_n_idx(start, n, arr->element_size, callback);
 }
 
@@ -60,7 +60,7 @@ void arr_for_each_n(array* arr, void* start, size_t n, void (*callback)(void*)) 
 
 
 void arr_for_each_rng_idx(array* arr, void* start, void* end, void (*callback)(void*, size_t)) {
-   _check_range(arr, start, end);
+   __check_range(arr, start, end);
    for_each_rng_idx(start, end, arr->element_size, callback);
 }
 
@@ -83,7 +83,7 @@ void arr_map(array* arr, void (*callback)(void*)) {
 
 
 void arr_map_n_idx(array* arr, void* start, size_t n, void (*callback)(void*, size_t)) {
-   _check_range(arr, start, start + n * arr->element_size);
+   __check_range(arr, start, start + n * arr->element_size);
    map_n_idx(start, n, arr->element_size, callback);
 }
 
@@ -94,7 +94,7 @@ void arr_map_n(array* arr, void* start, size_t n, void (*callback)(void*)) {
 
 
 void arr_map_rng_idx(array* arr, void* start, void* end, void (*callback)(void*, size_t)) {
-   _check_range(arr, start, end);
+   __check_range(arr, start, end);
    map_rng_idx(start, end, arr->element_size, callback);
 }
 
@@ -112,13 +112,13 @@ void* arr_find(array* arr, void* data) {
 
 
 void* arr_find_rng(array* arr, void* start, void* end, void* data) {
-   _check_range(arr, start, end);
+   __check_range(arr, start, end);
    return find(start, end, arr->element_size, data);
 }
 
 
 void* arr_find_n(array* arr, void* start, size_t n, void* data) {
-   _check_range(arr, start, start + n * arr->element_size);
+   __check_range(arr, start, start + n * arr->element_size);
    return find(start, start + n * arr->element_size, arr->element_size, data);
 }
 
@@ -131,13 +131,13 @@ void* arr_find_if(array* arr, int (*predicate)(void*)) {
 
 
 void* arr_find_if_rng(array* arr, void* start, void* end, int (*predicate)(void*)) {
-   _check_range(arr, start, end);
+   __check_range(arr, start, end);
    return find_if(start, end, arr->element_size, predicate);
 }
 
 
 void* arr_find_if_n(array* arr, void* start, size_t n, int (*predicate)(void*)) {
-   _check_range(arr, start, start + n * arr->element_size);
+   __check_range(arr, start, start + n * arr->element_size);
    return find_if(start, start + n * arr->element_size, arr->element_size, predicate);
 }
 
@@ -150,13 +150,13 @@ void* arr_find_if_not(array* arr, int (*predicate)(void*)) {
 
 
 void* arr_find_if_not_rng(array* arr, void* start, void* end, int (*predicate)(void*)) {
-   _check_range(arr, start, end);
+   __check_range(arr, start, end);
    return find_if_not(start, end, arr->element_size, predicate);
 }
 
 
 void* arr_find_if_not_n(array* arr, void* start, size_t n, int (*predicate)(void*)) {
-   _check_range(arr, start, start + n * arr->element_size);
+   __check_range(arr, start, start + n * arr->element_size);
    return find_if_not(start, start + n * arr->element_size, arr->element_size, predicate);
 }
 
@@ -177,6 +177,10 @@ void arr_free(array* arr) {
    _arr_destroyer(arr);
 }
 
+void arr_clear(array* arr) {
+   arr->size = 0;
+}
+
 
 void* arr_begin(array* arr) {
    return arr->data;
@@ -193,14 +197,13 @@ void* arr_front(array* arr) {
 }
 
 
-
 void* arr_back(array* arr) {
    return arr->data + (arr->size - 1) * arr->element_size;
 }
 
 
 void arr_fill_rng(array* arr, void* start, void* end, void* data) {
-   _check_range(arr, start, end);
+   __check_range(arr, start, end);
    fill(start, end, arr->element_size, data);
 }
 
@@ -210,7 +213,7 @@ void arr_fill(array* arr, void* data) {
 }
 
 void arr_fill_n(array* arr, void* start, size_t n, void* data) {
-   _check_range(arr, start, start + n * arr->element_size);
+   __check_range(arr, start, start + n * arr->element_size);
    fill_n(start, n, arr->element_size, data);
 }
 
@@ -239,12 +242,12 @@ void arr_reverse(array* arr) {
 }
 
 void arr_reverse_n(array* arr, void* start, size_t n) {
-   _check_range(arr, start, start + n * arr->element_size);
+   __check_range(arr, start, start + n * arr->element_size);
    reverse(start, start + n * arr->element_size, arr->element_size);
 }
 
 void arr_reverse_rng(array* arr, void* start, void* end) {
-   _check_range(arr, start, end);
+   __check_range(arr, start, end);
    reverse(start, end, arr->element_size);
 }
 
@@ -260,7 +263,7 @@ void arr_sort(array* arr) {
 }
 
 void arr_sort_n_cmp(array* arr, void* start, size_t n, int (*cmp)(void*, void*)) {
-   _check_range(arr, start, start + n * arr->element_size);
+   __check_range(arr, start, start + n * arr->element_size);
    sort(start, start + n * arr->element_size, arr->element_size, cmp);
 }
 
@@ -269,7 +272,7 @@ void arr_sort_n(array* arr, void* start, size_t n) {
 }
 
 void arr_sort_rng_cmp(array* arr, void* start, void* end, int (*cmp)(void*, void*)) {
-   _check_range(arr, start, end);
+   __check_range(arr, start, end);
    sort(start, end, arr->element_size, cmp);
 }
 

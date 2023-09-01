@@ -1,6 +1,5 @@
-#include "../../Array/array.h"
-#include "../../Array/array.c"
-
+// #include "../../c_dsa.h"
+#include "../../c_dsa.c" // TODO: Remove this
 typedef struct {
    char name[20];
    int age;

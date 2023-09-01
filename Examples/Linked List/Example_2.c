@@ -1,6 +1,6 @@
 #include "stdio.h"
-#include "../../Linked List/linked_list.h"
-#include "../../Linked List/linked_list.c"
+#include "../../Data Structures/Linked List/linked_list.h"
+#include "../../Data Structures/Linked List/linked_list.c" // TODO: Remove this
 
 typedef struct Array {
    int* data;

@@ -1,5 +1,5 @@
-#ifndef c_dsa_generic_util_h
-#define c_dsa_generic_util_h
+#ifndef c_dsa_generic_algorithms_h
+#define c_dsa_generic_algorithms_h
 #define byte unsigned char
 
 #include "stddef.h"

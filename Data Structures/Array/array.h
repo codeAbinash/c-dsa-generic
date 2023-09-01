@@ -11,7 +11,7 @@ typedef struct {
    void (*destroyer)(void*);
 } array;
 
-void _check_range(array* arr, void* start, void* end);
+void __check_range(array* arr, void* start, void* end);
 
 array array_init_with_destroyer(size_t size, size_t element_size, void (*destroyer)(void*));
 
@@ -32,7 +32,6 @@ void arr_for_each_rng(array* arr, void* start, void* end, void (*callback)(void*
 void arr_map_idx(array* arr, void (*callback)(void*, size_t));
 
 void arr_map(array* arr, void (*callback)(void*));
-
 
 void arr_map_n_idx(array* arr, void* start, size_t n, void (*callback)(void*, size_t));
 
@@ -63,6 +62,8 @@ void* arr_find_if_not_n(array* arr, void* start, size_t n, int (*predicate)(void
 void _arr_destroyer(array* arr);
 
 void arr_free(array* arr);
+
+void arr_clear(array* arr);
 
 void* arr_begin(array* arr);
 
