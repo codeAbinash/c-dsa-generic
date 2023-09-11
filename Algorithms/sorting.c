@@ -129,7 +129,6 @@ void _heap_ify(void* start, size_t size, int i, size_t element_size, int (*cmp)(
 
 void heap_sort(void* start, void* end, size_t element_size, int (*cmp)(void*, void*)) {
    // Start by heapifying the array
-   printf("Heap sort\n");
    size_t size = (end - start) / element_size;
    for (int i = size / 2 - 1; i >= 0; i--) {
       _heap_ify(start, size, i, element_size, cmp);
