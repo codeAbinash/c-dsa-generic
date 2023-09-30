@@ -1,7 +1,7 @@
 /**
  * Library for a vector data structure.
  * Author : Abinash Karmakar
- * 2021-09-01 MIT License Version: 1.0
+ * 2023-09-01 MIT License Version: 1.0
 */
 
 #include "malloc.h"
@@ -24,6 +24,7 @@
 */
 vector vec_init_with_destroyer(size_t size, size_t element_size, void (*destroyer)(void*)) {
    assert(size >= 0 && "Size must be non negative");
+   assert(element_size > 0 && "Element size must be positive");
    vector vec; // Creating a vector.
    vec.size = 0; // Setting the size to 0
    vec.element_size = element_size;
