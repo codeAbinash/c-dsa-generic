@@ -3,3 +3,7 @@
 **/test
 
 .vscode
+
+build
+
+.cache
